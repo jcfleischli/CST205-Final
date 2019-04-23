@@ -1,17 +1,18 @@
-# final project - checkers v3
+# final project - checkers v4
 # bijan - erik - john - levi
 
-# v3 changelog - levi:
-# vastly simplified the process() function to have more eoptimal/readable design
-# added "else: return false" to isMoveValid() function because it was returning false positives
-# added Bijan's functions and incorporated them into my process() function
-# program can now distinguish between valid and invalid movements
+# changes now listed in description
+# ============================================PROGRAM BELOW===============================================
+
+# Global scope - trying to limit this
+# references to move_list in beginning process() function and 'Long rect right - middle' in draw_board()
+move_list = []
 
 def checkers():
   light_grid_color = makeColor(215, 215, 215)
   checkerboard = makeEmptyPicture(640,480)
-  #this is the board with pieces in default position
-  #w - white, wk - white king, b - black, bk - black king
+  # This is the board with pieces in default position
+  # w - white, wk - white king, b - black, bk - black king
   board_list = [[' ','w',' ','w',' ','w',' ','w'],
                 ['w',' ','w',' ','w',' ','w',' '],
                 [' ','w',' ','w',' ','w',' ','w'],
@@ -29,44 +30,31 @@ def checkers():
     repaint(draw_board(board_list, checkerboard))
     board_list[:] = process(requestString("Player 2, make your move."), board_list, false, 1)
     repaint(draw_board(board_list, checkerboard))
-  
-  showInformation("this pause is to see speed of draw_board function")
-  
-  board_list = [[' ','w',' ','w',' ',' ',' ','w'],
-                ['w',' ','bk',' ','w',' ','w',' '],
-                [' ','w',' ',' ',' ',' ',' ','w'],
-                [' ',' ','wk',' ',' ',' ',' ',' '],
-                [' ','b',' ',' ',' ',' ',' ',' '],
-                [' ',' ',' ',' ','b',' ','b',' '],
-                [' ','b',' ','b',' ','wk',' ','b'],
-                [' ',' ',' ',' ','b',' ','b',' ']]
-  
-  repaint(draw_board(board_list, checkerboard))
 
 
 # Function to draw the board. Takes parameters of list board and initial blank image
 # Future plans: Add parameters to display Turn #, active player, etc.
 def draw_board(text_board, img_board):
-  #counters
+  # Counters
   num_black = 0
   num_white = 0
 
-  #text styles
+  # Text styles
   king_style = makeStyle(serif, italic + bold, 18)
   text_style1 = makeStyle(serif, bold, 14)
   
-  #colors
+  # Colors
   dark_grid_color = makeColor(171, 162, 191)
   light_grid_color = makeColor(215, 215, 215)
   dark_piece_color = makeColor(77, 59, 114)
  
-  #draws text coordinates and the dark squares to make the grid
+  # Draws text coordinates and the dark squares to make the grid
   addRectFilled(img_board, 25, 16, 439, 439, light_grid_color)  
   for x in range(8):
     
-    #vertical coordinate letters
+    # Vertical coordinate letters
     addTextWithStyle(img_board, 50+(x*55),472,str(chr(ord('a')+x)),text_style1, black)
-    #horizontal coordinate numbers
+    # Horizontal coordinate numbers
     addTextWithStyle(img_board, 8,50+(x*55),str(8-x),text_style1, black)
     for y in range(8):
       if x % 2 == 1 and y % 2 == 0:
@@ -76,17 +64,17 @@ def draw_board(text_board, img_board):
   
   addRect(img_board, 25, 16, 439, 439, black)
   
-  #draw and keep count of pieces
+  # Draw and keep count of pieces
   for x in range(8):
     for y in range(8):
-      #regular white piece
+      # Regular white piece
       if text_board[y][x] == 'w':  
         addOvalFilled(img_board, 32+(x*55), 24+(y*55), 44, 43, gray)
         addOvalFilled(img_board, 30+(x*55), 21+(y*55), 43, 43, white)
         addOval(img_board, 30+(x*55), 21+(y*55), 43, 43, black)
         addOval(img_board, 33+(x*55), 24+(y*55), 37, 37, black)
         num_white += 1
-      #kinged white piece
+      # Kinged white piece
       elif text_board[y][x] == 'wk': 
         addOvalFilled(img_board, 32+(x*55), 24+(y*55), 44, 43, gray)
         addOvalFilled(img_board, 28+(x*55), 19+(y*55), 47, 47, yellow)
@@ -95,14 +83,14 @@ def draw_board(text_board, img_board):
         addOval(img_board, 28+(x*55), 19+(y*55), 47, 47, black)
         addTextWithStyle(img_board, 45+(x*55), 49+(y*55), "K", king_style, black)
         num_white += 1
-      #regular dark piece
+      # Regular dark piece
       elif text_board[y][x] == 'b': 
         addOvalFilled(img_board, 32+(x*55), 24+(y*55), 44, 43, gray)
         addOvalFilled(img_board, 30+(x*55), 21+(y*55), 43, 43, dark_piece_color)
         addOval(img_board, 30+(x*55), 21+(y*55), 43, 43, white)
         addOval(img_board, 33+(x*55), 24+(y*55), 37, 37, white)
         num_black += 1
-      #kinged dark piece
+      # Kinged dark piece
       elif text_board[y][x] == 'bk': 
         addOvalFilled(img_board, 32+(x*55), 24+(y*55), 44, 43, gray)
         addOvalFilled(img_board, 28+(x*55), 19+(y*55), 47, 47, yellow)
@@ -111,14 +99,18 @@ def draw_board(text_board, img_board):
         addTextWithStyle(img_board, 45+(x*55), 49+(y*55), "K", king_style, white)
         num_black += 1
         
-  #small rect right - top
+  # Small rect right - top
   addRectFilled(img_board, 474, 16, 158, 70, light_grid_color)
   addRect(img_board, 474, 16, 158, 70, black)
   addTextWithStyle(img_board, 480, 35,"Player 2: " + str(num_white) + " pieces", text_style1, black)
   
-  #long rect right - middle
+  # Long rect right - middle
   addRectFilled(img_board, 474, 97, 158, 276, light_grid_color)
   addRect(img_board, 474, 97, 158, 276, black)
+  addTextWithStyle(img_board, 510, 112,"Last 10 Moves", text_style1, black)
+  addLine(img_board, 474, 115, 632, 115, black)
+  for move in range(len(move_list)): # using global var 'move_list'
+    addTextWithStyle(img_board, 525, 138+(18*move),str(move_list[move]), text_style1, black) # using global var 'move_list'
   
   #small rect right - bottom
   addRectFilled(img_board, 474, 384, 158, 70, light_grid_color)
@@ -199,9 +191,10 @@ def process(command, text_board, isKing, player):
       map_grid[coord] = str(loc)
       loc -= 10
     total_loc += 1
-  
+     
   # Analyze user input
   piece = 'none'
+  command_copy = command.lower()
   command = command.lower().split()
   # Test if valid input
   if len(command) == 3 and len(command[0]) == 2 and len(command[2]) == 2:
@@ -217,11 +210,13 @@ def process(command, text_board, isKing, player):
         y = int(map_grid[command[0]][1:])
         piece = text_board[x][y]
         text_board[x][y] = ' '
+        add_to_move_list(command_copy) # Add move to gloval variable 'move_list'
       # Place player piece
       if command[2] in map_grid:
         x = int(map_grid[command[2]][:1])
         y = int(map_grid[command[2]][1:])
         text_board[x][y] = piece
+        
       else:
         show_message('ERROR')
     else:
@@ -229,4 +224,10 @@ def process(command, text_board, isKing, player):
   else:
     show_message('ERROR')
   return text_board
-  
+ 
+# Function to add valid commands to 'move_list'
+def add_to_move_list(command):
+  command = command.lower()
+  move_list.insert(0,command) # using global var 'move_list'
+  if len(move_list) == 11:
+    move_list.pop()
