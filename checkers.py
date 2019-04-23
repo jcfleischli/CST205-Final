@@ -1,11 +1,12 @@
-# final project - checkers v1
+# final project - checkers v2
 # bijan - erik - john - levi
 
-# v1 changelog - erik:
-# created draw_board function which takes a 2D list and draws the board
-# checkers() currently being used just to test speed and design
-# added coordinate letters and numbers to side
-# added piece counts - can seperate regular and king pieces if desired
+# v2 changelog - levi:
+# created show_message() function for message display
+# created process() function that processes user input to move game pieces
+# currently, game pieces can move anywhere they want
+# need: is_move_valid() function
+
 
 def checkers():
   light_grid_color = makeColor(215, 215, 215)
@@ -21,6 +22,14 @@ def checkers():
                 [' ','b',' ','b',' ','b',' ','b'],
                 ['b',' ','b',' ','b',' ','b',' ']]
   repaint(draw_board(board_list, checkerboard))
+  
+  show_message('Welcome')
+  gameover = False
+  while not gameover:
+    board_list[:] = process(requestString("Player 1, make your move."), board_list)
+    repaint(draw_board(board_list, checkerboard))
+    board_list[:] = process(requestString("Player 2, make your move."), board_list)
+    repaint(draw_board(board_list, checkerboard))
   
   showInformation("this pause is to see speed of draw_board function")
   
@@ -118,3 +127,363 @@ def draw_board(text_board, img_board):
   addTextWithStyle(img_board, 480, 405,"Player 1: " + str(num_black) + " pieces", text_style1, black)
   
   return img_board
+
+def show_message(prompt):
+  prompt = prompt.lower()
+  if prompt == 'welcome':
+    showInformation("Welcome to Checkers!\nIn this game, you and an opponent will take turns moving your pieces diagonally through text commands (e.g. 'C3 to D4').\nYour pieces can only move forward in a diagonal direction. However, pieces will be granted backwards movement capabilities if they reach the opposite end of the board.\nThe objective is to capture all of your enemy's pieces by jumping over them.\nRemember that you can string together multiple jumps!\nGood luck!")
+  if prompt == 'error':
+    showInformation("Error. Unable to process that command.")
+
+# Process player movement commands (e.g. 'C3 to D4')
+# Adjusts board for proper movement display
+def process(command, text_board):
+  piece = 'none'
+  command = command.lower().split()
+  if len(command) == 3 and len(command[0]) == 2 and len(command[2]) == 2:
+    if command[1] == "to" and command[0][:1].isalpha() and command[0][1:].isdigit() and command[2][:1].isalpha() and command[2][1:].isdigit():
+      # Remove player piece
+      if command[0][:1] == 'a':
+        if command[0][1:] == '1':
+          piece = text_board[7][0]
+          text_board[7][0] = ' '
+        if command[0][1:] == '2':
+          piece = text_board[6][0]
+          text_board[6][0] = ' '
+        if command[0][1:] == '3':
+          piece = text_board[5][0]
+          text_board[5][0] = ' '
+        if command[0][1:] == '4':
+          piece = text_board[4][0]
+          text_board[4][0] = ' '
+        if command[0][1:] == '5':
+          piece = text_board[3][0]
+          text_board[3][0] = ' '
+        if command[0][1:] == '6':
+          piece = text_board[2][0]
+          text_board[2][0] = ' '
+        if command[0][1:] == '7':
+          piece = text_board[1][0]
+          text_board[1][0] = ' '
+        if command[0][1:] == '8':
+          piece = text_board[0][0]
+          text_board[0][0] = ' '
+      if command[0][:1] == 'b':
+        if command[0][1:] == '1':
+          piece = text_board[7][1]
+          text_board[7][1] = ' '
+        if command[0][1:] == '2':
+          piece = text_board[6][1]
+          text_board[6][1] = ' '
+        if command[0][1:] == '3':
+          piece = text_board[5][1]
+          text_board[5][1] = ' '
+        if command[0][1:] == '4':
+          piece = text_board[4][1]
+          text_board[4][1] = ' '
+        if command[0][1:] == '5':
+          piece = text_board[3][1]
+          text_board[3][1] = ' '
+        if command[0][1:] == '6':
+          piece = text_board[2][1]
+          text_board[2][1] = ' '
+        if command[0][1:] == '7':
+          piece = text_board[1][1]
+          text_board[1][1] = ' '
+        if command[0][1:] == '8':
+          piece = text_board[0][1]
+          text_board[0][1] = ' '
+      if command[0][:1] == 'c':
+        if command[0][1:] == '1':
+          piece = text_board[7][2]
+          text_board[7][2] = ' '
+        if command[0][1:] == '2':
+          piece = text_board[6][2]
+          text_board[6][2] = ' '
+        if command[0][1:] == '3':
+          piece = text_board[5][2]
+          text_board[5][2] = ' '
+        if command[0][1:] == '4':
+          piece = text_board[4][2]
+          text_board[4][2] = ' '
+        if command[0][1:] == '5':
+          piece = text_board[3][2]
+          text_board[3][2] = ' '
+        if command[0][1:] == '6':
+          piece = text_board[2][2]
+          text_board[2][2] = ' '
+        if command[0][1:] == '7':
+          piece = text_board[1][2]
+          text_board[1][2] = ' '
+        if command[0][1:] == '8':
+          piece = text_board[0][2]
+          text_board[0][2] = ' '
+      if command[0][:1] == 'd':
+        if command[0][1:] == '1':
+          piece = text_board[7][3]
+          text_board[7][3] = ' '
+        if command[0][1:] == '2':
+          piece = text_board[6][3]
+          text_board[6][3] = ' '
+        if command[0][1:] == '3':
+          piece = text_board[5][3]
+          text_board[5][3] = ' '
+        if command[0][1:] == '4':
+          piece = text_board[4][3]
+          text_board[4][3] = ' '
+        if command[0][1:] == '5':
+          piece = text_board[3][3]
+          text_board[3][3] = ' '
+        if command[0][1:] == '6':
+          piece = text_board[2][3]
+          text_board[2][3] = ' '
+        if command[0][1:] == '7':
+          piece = text_board[1][3]
+          text_board[1][3] = ' '
+        if command[0][1:] == '8':
+          piece = text_board[0][3]
+          text_board[0][3] = ' '
+      if command[0][:1] == 'e':
+        if command[0][1:] == '1':
+          piece = text_board[7][4]
+          text_board[7][4] = ' '
+        if command[0][1:] == '2':
+          piece = text_board[6][4]
+          text_board[6][4] = ' '
+        if command[0][1:] == '3':
+          piece = text_board[5][4]
+          text_board[5][4] = ' '
+        if command[0][1:] == '4':
+          piece = text_board[4][4]
+          text_board[4][4] = ' '
+        if command[0][1:] == '5':
+          piece = text_board[3][4]
+          text_board[3][4] = ' '
+        if command[0][1:] == '6':
+          piece = text_board[2][4]
+          text_board[2][4] = ' '
+        if command[0][1:] == '7':
+          piece = text_board[1][4]
+          text_board[1][4] = ' '
+        if command[0][1:] == '8':
+          piece = text_board[0][4]
+          text_board[0][4] = ' '
+      if command[0][:1] == 'f':
+        if command[0][1:] == '1':
+          piece = text_board[7][5]
+          text_board[7][5] = ' '
+        if command[0][1:] == '2':
+          piece = text_board[6][5]
+          text_board[6][5] = ' '
+        if command[0][1:] == '3':
+          piece = text_board[5][5]
+          text_board[5][5] = ' '
+        if command[0][1:] == '4':
+          piece = text_board[4][5]
+          text_board[4][5] = ' '
+        if command[0][1:] == '5':
+          piece = text_board[3][5]
+          text_board[3][5] = ' '
+        if command[0][1:] == '6':
+          piece = text_board[2][5]
+          text_board[2][5] = ' '
+        if command[0][1:] == '7':
+          piece = text_board[1][5]
+          text_board[1][5] = ' '
+        if command[0][1:] == '8':
+          piece = text_board[0][5]
+          text_board[0][5] = ' '
+      if command[0][:1] == 'g':
+        if command[0][1:] == '1':
+          piece = text_board[7][6]
+          text_board[7][6] = ' '
+        if command[0][1:] == '2':
+          piece = text_board[6][6]
+          text_board[6][6] = ' '
+        if command[0][1:] == '3':
+          piece = text_board[5][6]
+          text_board[5][6] = ' '
+        if command[0][1:] == '4':
+          piece = text_board[4][6]
+          text_board[4][6] = ' '
+        if command[0][1:] == '5':
+          piece = text_board[3][6]
+          text_board[3][6] = ' '
+        if command[0][1:] == '6':
+          piece = text_board[2][6]
+          text_board[2][6] = ' '
+        if command[0][1:] == '7':
+          piece = text_board[1][6]
+          text_board[1][6] = ' '
+        if command[0][1:] == '8':
+          piece = text_board[0][6]
+          text_board[0][6] = ' '
+      if command[0][:1] == 'h':
+        if command[0][1:] == '1':
+          piece = text_board[7][7]
+          text_board[7][7] = ' '
+        if command[0][1:] == '2':
+          piece = text_board[6][7]
+          text_board[6][7] = ' '
+        if command[0][1:] == '3':
+          piece = text_board[5][7]
+          text_board[5][7] = ' '
+        if command[0][1:] == '4':
+          piece = text_board[4][7]
+          text_board[4][7] = ' '
+        if command[0][1:] == '5':
+          piece = text_board[3][7]
+          text_board[3][7] = ' '
+        if command[0][1:] == '6':
+          piece = text_board[2][7]
+          text_board[2][7] = ' '
+        if command[0][1:] == '7':
+          piece = text_board[1][7]
+          text_board[1][7] = ' '
+        if command[0][1:] == '8':
+          piece = text_board[0][7]
+          text_board[0][7] = ' '
+      
+      # Place player piece
+      if command[2][:1] == 'a':
+        if command[2][1:] == '1':
+          text_board[7][0] = piece
+        if command[2][1:] == '2':
+          text_board[6][0] = piece
+        if command[2][1:] == '3':
+          text_board[5][0] = piece
+        if command[2][1:] == '4':
+          text_board[4][0] = piece
+        if command[2][1:] == '5':
+          text_board[3][0] = piece
+        if command[2][1:] == '6':
+          text_board[2][0] = piece
+        if command[2][1:] == '7':
+          text_board[1][0] = piece
+        if command[2][1:] == '8':
+          text_board[0][0] = piece
+      if command[2][:1] == 'b':
+        if command[2][1:] == '1':
+          text_board[7][1] = piece
+        if command[2][1:] == '2':
+          text_board[6][1] = piece
+        if command[2][1:] == '3':
+          text_board[5][1] = piece
+        if command[2][1:] == '4':
+          text_board[4][1] = piece
+        if command[2][1:] == '5':
+          text_board[3][1] = piece
+        if command[2][1:] == '6':
+          text_board[2][1] = piece
+        if command[2][1:] == '7':
+          text_board[1][1] = piece
+        if command[2][1:] == '8':
+          text_board[0][1] = piece
+      if command[2][:1] == 'c':
+        if command[2][1:] == '1':
+          text_board[7][2] = piece
+        if command[2][1:] == '2':
+          text_board[6][2] = piece
+        if command[2][1:] == '3':
+          text_board[5][2] = piece
+        if command[2][1:] == '4':
+          text_board[4][2] = piece
+        if command[2][1:] == '5':
+          text_board[3][2] = piece
+        if command[2][1:] == '6':
+          text_board[2][2] = piece
+        if command[2][1:] == '7':
+          text_board[1][2] = piece
+        if command[2][1:] == '8':
+          text_board[0][2] = piece
+      if command[2][:1] == 'd':
+        if command[2][1:] == '1':
+          text_board[7][3] = piece
+        if command[2][1:] == '2':
+          text_board[6][3] = piece
+        if command[2][1:] == '3':
+          text_board[5][3] = piece
+        if command[2][1:] == '4':
+          text_board[4][3] = piece
+        if command[2][1:] == '5':
+          text_board[3][3] = piece
+        if command[2][1:] == '6':
+          text_board[2][3] = piece
+        if command[2][1:] == '7':
+          text_board[1][3] = piece
+        if command[2][1:] == '8':
+          text_board[0][3] = piece
+      if command[2][:1] == 'e':
+        if command[2][1:] == '1':
+          text_board[7][4] = piece
+        if command[2][1:] == '2':
+          text_board[6][4] = piece
+        if command[2][1:] == '3':
+          text_board[5][4] = piece
+        if command[2][1:] == '4':
+          text_board[4][4] = piece
+        if command[2][1:] == '5':
+          text_board[3][4] = piece
+        if command[2][1:] == '6':
+          text_board[2][4] = piece
+        if command[2][1:] == '7':
+          text_board[1][4] = piece
+        if command[2][1:] == '8':
+          text_board[0][4] = piece
+      if command[2][:1] == 'f':
+        if command[2][1:] == '1':
+          text_board[7][5] = piece
+        if command[2][1:] == '2':
+          text_board[6][5] = piece
+        if command[2][1:] == '3':
+          text_board[5][5] = piece
+        if command[2][1:] == '4':
+          text_board[4][5] = piece
+        if command[2][1:] == '5':
+          text_board[3][5] = piece
+        if command[2][1:] == '6':
+          text_board[2][5] = piece
+        if command[2][1:] == '7':
+          text_board[1][5] = piece
+        if command[2][1:] == '8':
+          text_board[0][5] = piece
+      if command[2][:1] == 'g':
+        if command[2][1:] == '1':
+          text_board[7][6] = piece
+        if command[2][1:] == '2':
+          text_board[6][6] = piece
+        if command[2][1:] == '3':
+          text_board[5][6] = piece
+        if command[2][1:] == '4':
+          text_board[4][6] = piece
+        if command[2][1:] == '5':
+          text_board[3][6] = piece
+        if command[2][1:] == '6':
+          text_board[2][6] = piece
+        if command[2][1:] == '7':
+          text_board[1][6] = piece
+        if command[2][1:] == '8':
+          text_board[0][6] = piece
+      if command[2][:1] == 'h':
+        if command[2][1:] == '1':
+          text_board[7][7] = piece
+        if command[2][1:] == '2':
+          text_board[6][7] = piece
+        if command[2][1:] == '3':
+          text_board[5][7] = piece
+        if command[2][1:] == '4':
+          text_board[4][7] = piece
+        if command[2][1:] == '5':
+          text_board[3][7] = piece
+        if command[2][1:] == '6':
+          text_board[2][7] = piece
+        if command[2][1:] == '7':
+          text_board[1][7] = piece
+        if command[2][1:] == '8':
+          text_board[0][7] = piece
+    else:
+      show_message('ERROR')
+  else:
+    show_message('ERROR')
+  return text_board
+  
