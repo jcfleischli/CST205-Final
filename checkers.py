@@ -1,7 +1,5 @@
-# final project - checkers v4.5
+# final project - checkers v4
 # bijan - erik - john - levi
-
-# ============================================PROGRAM BELOW===============================================
 
 # Global scope - trying to limit this
 # references to move_list in beginning process() function and 'Long rect right - middle' in draw_board()
@@ -25,13 +23,13 @@ def checkers():
   show_message('Welcome')
   gameover = false
   while not gameover:  
-    board_list[:] = process(requestString("Player 1, make your move."), board_list, false, 0)
+    board_list[:] = process(requestString("Player 1, make your move."), board_list, 0)
     for j in range(8):
       if board_list[0][j] == 'b':
         print 'bk'
         board_list[0][j] = 'bk'
     repaint(draw_board(board_list, checkerboard))
-    board_list[:] = process(requestString("Player 2, make your move."), board_list, false, 1)
+    board_list[:] = process(requestString("Player 2, make your move."), board_list, 1)
     for j in range(8):
       if board_list[7][j] == 'w':
         print 'wk'
@@ -171,17 +169,18 @@ def isPreviousDiagonalAPieceForCapture(startRow, startCol, destRow, destCol, pla
   #debugging print (isSpaceAnOpponentsPiece(middleRow, middleCol, player, board))
   return isSpaceAnOpponentsPiece(middleRow, middleCol, player, board)
 
-def isMoveValid(startRow, startCol, destRow, destCol, isKing, board, player):
+def isMoveValid(startRow, startCol, destRow, destCol, board, player):
   #check if the board space has a piece and the destination is empty
   if board[startRow][startCol] == ' ' or board[destRow][destCol] != ' ':
     return false
-  #check that the move is forward
-  #player == 0 for black
-  if player == 0 and destRow > startRow and isKing == false:
-    return false
-  #player == 1 for white
-  if player == 1 and destRow < startRow and isKing == false:
-    return false
+  #check that the move is forward unless the piece is a King
+  if board[startRow][startCol][-1:] != 'k':
+    #player == 0 for black
+    if player == 0 and destRow > startRow:
+      return false
+    #player == 1 for white
+    if player == 1 and destRow < startRow:
+      return false
   
   #check that the spaces are adjacent Diagonals
   if isAdjacent(startRow, startCol, destRow, destCol, 1) == false:
@@ -198,7 +197,7 @@ def isMoveValid(startRow, startCol, destRow, destCol, isKing, board, player):
 
 # Process player movement commands (e.g. 'C3 to D4')
 # Adjusts board for proper movement display
-def process(command, text_board, isKing, player):
+def process(command, text_board, player):
   # Define grid dictionary for letter + num = x,y coordinates 
   # to ease the calculation of user-input
   map_grid = {}
@@ -225,9 +224,9 @@ def process(command, text_board, isKing, player):
     if command[1] == "to" and command[0][:1] <= 'h' and int(command[0][1:]) <= 8 and command[2][:1] <= 'h' and int(command[2][1:]) <= 8:
       # Test if valid movement for pieces 
       if command[0] in map_grid and command[2] in map_grid:
-        while not isMoveValid(int(map_grid[command[0]][:1]), int(map_grid[command[0]][1:]), int(map_grid[command[2]][:1]), int(map_grid[command[2]][1:]), isKing, text_board, player):
+        while not isMoveValid(int(map_grid[command[0]][:1]), int(map_grid[command[0]][1:]), int(map_grid[command[2]][:1]), int(map_grid[command[2]][1:]), text_board, player):
           show_message('INVALID MOVE')
-          return process(requestString("Player %d, make your move." % (player + 1)), text_board, false, player)
+          return process(requestString("Player %d, make your move." % (player + 1)), text_board, player)
       # Remove player piece
       if command[0] in map_grid:
         x = int(map_grid[command[0]][:1])
@@ -243,13 +242,13 @@ def process(command, text_board, isKing, player):
         
       else:
         show_message('ERROR')
-        return process(requestString("Player %d, make your move." % (player + 1)), text_board, false, player)
+        return process(requestString("Player %d, make your move." % (player + 1)), text_board, player)
     else:
       show_message('ERROR')
-      return process(requestString("Player %d, make your move." % (player + 1)), text_board, false, player)
+      return process(requestString("Player %d, make your move." % (player + 1)), text_board, player)
   else:
     show_message('ERROR')
-    return process(requestString("Player %d, make your move." % (player + 1)), text_board, false, player)
+    return process(requestString("Player %d, make your move." % (player + 1)), text_board, player)
     
   speech(command)
   
@@ -265,7 +264,7 @@ def add_to_move_list(command):
 # Function to play text-to-speech for player commands
 def speech(command):
   # Folder must contain wav files for 'a', 'b', 'c', 'd', 'e', 'f', 'g', '1', '2', '3', '4', '5', '6', '7', '8', and 'to'
-  folder = "E:\\CSUMB - CS Online\\3. CST205\\Module 7\\Checkers\\Samples2\\"
+  folder = os.path.dirname(os.path.realpath(__file__)) + "\\sounds\\"
   start1 = command[0][:1]
   start2 = command[0][1:]
   to = command[1]
