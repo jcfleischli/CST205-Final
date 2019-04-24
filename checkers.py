@@ -1,36 +1,5 @@
-# final project - checkers v4
+# final project - checkers 
 # bijan - erik - john - levi
-
-# KNOWN ISSUES/BUGS:
-# crashes sometimes while playing and moving pieces, usually at 'while not' loop in valid movement testing
-
-#v4.1 changelog - bijan:
-#fixed issue in isMoveValid not checking for capturing enemy pieces properly
-
-# v4 changelog - erik:
-# added last add_to_move_list() function to keep track of valid moves
-# added move_list to display last 10 moves
-# will add colors corresponding to which player's piece was moved
-
-# v3 changelog - levi:
-# vastly simplified the process() function to have more optimal/readable design
-# added "else: return false" to isMoveValid() function because it was returning false positives
-# added Bijan's functions and incorporated them into my process() function
-# program can now distinguish between valid and invalid movements
-# *however*, I have not incorporated all of Bijan's functions to determine one piece jumping over another
-
-# v2 changelog - levi:
-# created show_message() function for message display
-# created process() function that processes user input to move game pieces
-# currently, game pieces can move anywhere they want
-# need: is_move_valid() function
-
-# v1 changelog - erik:
-# created draw_board function which takes a 2D list and draws the board
-# checkers() currently being used just to test speed and design
-# added coordinate letters and numbers to side
-# added piece counts - can seperate regular and king pieces if desired
-# ============================================PROGRAM BELOW===============================================
 
 # Global scope - trying to limit this
 # references to move_list in beginning process() function and 'Long rect right - middle' in draw_board()
@@ -58,7 +27,8 @@ def checkers():
     repaint(draw_board(board_list, checkerboard))
     board_list[:] = process(requestString("Player 2, make your move."), board_list, false, 1)
     repaint(draw_board(board_list, checkerboard))
-
+  
+  showInformation("GAME OVER")
 
 # Function to draw the board. Takes parameters of list board and initial blank image
 # Future plans: Add parameters to display Turn #, active player, etc.
@@ -158,16 +128,24 @@ def show_message(prompt):
 
 #Checks if a two spaces are diagonal and 'dist' spaces away
 def isAdjacent(startRow, startCol, destRow, destCol, dist):
-  return abs(destRow - startRow) == dist and abs(destCol - startCol) == dist
+  #debugging print("Is it " + str(dist) + " Away: ")
+  #debugging print(str(abs(destRow - startRow) == dist and abs(destCol - startCol) == dist))
+  if abs(destRow - startRow) == dist and abs(destCol - startCol) == dist:
+    return true   
+  return false
 
 #Checks if the space is occupied by the opposing player's piece  
 def isSpaceAnOpponentsPiece(row, col, player, board):
   if player == 0:
-    return board[row][col] == 'w' or board[row][col] == 'wk'
+    if board[row][col] == 'w' or board[row][col] == 'wk':
+      board[row][col] = ' '
+      return true
   
   if player == 1:
-    return board[row][col] == 'b' or board[row][col] == 'bk'
-    
+    if board[row][col] == 'b' or board[row][col] == 'bk':
+      board[row][col] = ' '
+      return true
+       
   return false
 
 #Checks if a space before has a piece to capture
@@ -179,6 +157,8 @@ def isPreviousDiagonalAPieceForCapture(startRow, startCol, destRow, destCol, pla
   colDist = (destCol - startCol) / 2
   middleRow = startRow + rowDist
   middleCol = startCol + colDist
+  #debugging print("jumped over enemy: ")
+  #debugging print (isSpaceAnOpponentsPiece(middleRow, middleCol, player, board))
   return isSpaceAnOpponentsPiece(middleRow, middleCol, player, board)
 
 def isMoveValid(startRow, startCol, destRow, destCol, isKing, board, player):
@@ -194,14 +174,17 @@ def isMoveValid(startRow, startCol, destRow, destCol, isKing, board, player):
     return false
   
   #check that the spaces are adjacent Diagonals
-  if isAdjacent(startRow, startCol, destRow, destCol, 1) != true:
+  if isAdjacent(startRow, startCol, destRow, destCol, 1) == false:
     #if not an adjacent, check if they are two diagonals away and space between is a piece for a capture
-    if isAdjacent(startRow, startCol, destRow, destCol, 2) != true and isPreviousDiagonalAPieceForCapture(startRow, startCol, destRow, destCol, player, board):
-      return false
-    else:
+    if isAdjacent(startRow, startCol, destRow, destCol, 2) and isPreviousDiagonalAPieceForCapture(startRow, startCol, destRow, destCol, player, board):
+      #debugging print ("capture")
       return true
+    else:
+      #debugging print ("not capture")
+      return false
+  else:
+    return true
   
-  return true
 
 # Process player movement commands (e.g. 'C3 to D4')
 # Adjusts board for proper movement display
