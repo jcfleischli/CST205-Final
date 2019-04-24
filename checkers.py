@@ -1,4 +1,4 @@
-# final project - checkers v4.4
+# final project - checkers v4.5
 # bijan - erik - john - levi
 
 # ============================================PROGRAM BELOW===============================================
@@ -23,11 +23,19 @@ def checkers():
   repaint(draw_board(board_list, checkerboard))
   
   show_message('Welcome')
-  gameover = False
+  gameover = false
   while not gameover:  
     board_list[:] = process(requestString("Player 1, make your move."), board_list, false, 0)
+    for j in range(8):
+      if board_list[0][j] == 'b':
+        print 'bk'
+        board_list[0][j] = 'bk'
     repaint(draw_board(board_list, checkerboard))
     board_list[:] = process(requestString("Player 2, make your move."), board_list, false, 1)
+    for j in range(8):
+      if board_list[7][j] == 'w':
+        print 'wk'
+        board_list[7][j] = 'wk'
     repaint(draw_board(board_list, checkerboard))
   
   showInformation("GAME OVER")
@@ -256,7 +264,7 @@ def add_to_move_list(command):
 
 # Function to play text-to-speech for player commands
 def speech(command):
-  # Folder must contain wav files for a, b, c, d, e, f, g, 1, 2, 3, 4, 5, 6, 7, 8, and to
+  # Folder must contain wav files for 'a', 'b', 'c', 'd', 'e', 'f', 'g', '1', '2', '3', '4', '5', '6', '7', '8', and 'to'
   folder = "E:\\CSUMB - CS Online\\3. CST205\\Module 7\\Checkers\\Samples2\\"
   start1 = command[0][:1]
   start2 = command[0][1:]
