@@ -1,9 +1,9 @@
-# final project - checkers v4.7
-# bijan - erik - john - levi
+# CST205 Final Project - Checkers v5.0
+# Bijan - Erik - John - Levi
 
-# ============================================PROGRAM BELOW===============================================
+# A checkers game with graphical board and audio
 
-# Global scope - trying to limit this
+# Global scope 
 # references to move_list in beginning process() function and 'Long rect right - middle' in draw_board()
 move_list = []
 
@@ -24,6 +24,7 @@ def main():
   # Initiate game loop
   show_message('WELCOME')
   gameover = false
+  
   while not gameover:  
     # Player 1
     board_list[:] = process(requestString("Player 1, make your move."), board_list, 0)
@@ -38,7 +39,6 @@ def main():
       for j in range(8):
         if 'w' in board_list[i][j] or 'wk' in board_list[i][j]:
           num_white += 1
-    num_white = 0
     if num_white == 0:
       repaint(draw_board(board_list, checkerboard))
       show_message('P1WINS')
@@ -129,31 +129,33 @@ def draw_board(text_board, img_board):
         num_black += 1
         
   # Small rect right - top
-  addRectFilled(img_board, 474, 16, 158, 70, light_grid_color)
+  addRectFilled(img_board, 474, 16, 158, 70, dark_grid_color)
   addRect(img_board, 474, 16, 158, 70, black)
-  addTextWithStyle(img_board, 480, 35,"Player 2: " + str(num_white) + " pieces", text_style1, black)
+  addTextWithStyle(img_board, 497, 36,"Player 2: " + str(num_white) + " pieces", text_style1, gray)
+  addTextWithStyle(img_board, 496, 35,"Player 2: " + str(num_white) + " pieces", text_style1, white)
   
   # Long rect right - middle
-  addRectFilled(img_board, 474, 97, 158, 276, light_grid_color)
+  addRectFilled(img_board, 474, 97, 158, 276, dark_grid_color)
   addRect(img_board, 474, 97, 158, 276, black)
+  addTextWithStyle(img_board, 511, 113,"Last 10 Moves", text_style1, gray)
   addTextWithStyle(img_board, 510, 112,"Last 10 Moves", text_style1, black)
   addLine(img_board, 474, 115, 632, 115, black)
   for move in range(len(move_list)): # using global var 'move_list'
-    addTextWithStyle(img_board, 525, 138+(18*move),str(move_list[move]), text_style1, black) # using global var 'move_list'
+    move_str = str(move_list[move])
+    if move_str[:2] == "P1":
+      addTextWithStyle(img_board, 518, 139+(18*move),str(move_list[move]), text_style1, gray) # using global var 'move_list'
+      addTextWithStyle(img_board, 517, 138+(18*move),str(move_list[move]), text_style1, black) # using global var 'move_list'
+    elif move_str[:2] == "P2":
+      addTextWithStyle(img_board, 518, 139+(18*move),str(move_list[move]), text_style1, gray) # using global var 'move_list'
+      addTextWithStyle(img_board, 517, 138+(18*move),str(move_list[move]), text_style1, white) # using global var 'move_list'
+
   
   # Small rect right - bottom
-  addRectFilled(img_board, 474, 384, 158, 70, light_grid_color)
+  addRectFilled(img_board, 474, 384, 158, 70, dark_grid_color)
   addRect(img_board, 474, 384, 158, 70, black)
-  addTextWithStyle(img_board, 480, 405,"Player 1: " + str(num_black) + " pieces", text_style1, black)
+  addTextWithStyle(img_board, 497, 406,"Player 1: " + str(num_black) + " pieces", text_style1, gray)
+  addTextWithStyle(img_board, 496, 405,"Player 1: " + str(num_black) + " pieces", text_style1, black)
   
-  # Check for gameover due to no pieces remaining
-  if num_white == 0:
-    show_message("P1WINS")
-    return exit
-  elif num_black == 0:
-    show_message("P2WINS")
-    return exit
-
   return img_board
 
 
@@ -271,7 +273,7 @@ def process(command, text_board, player):
         piece = text_board[x][y]
         text_board[x][y] = ' '
         # Add move to global variable 'move_list'
-        add_to_move_list(command_copy) 
+        add_to_move_list(command_copy, player) 
       # Place player piece
       if command[2] in map_grid:
         x = int(map_grid[command[2]][:1])
@@ -292,9 +294,12 @@ def process(command, text_board, player):
   return text_board
  
 # Function to add valid commands to 'move_list'
-def add_to_move_list(command):
+def add_to_move_list(command,player):
   command = command.lower()
-  move_list.insert(0,command) # using global var 'move_list'
+  if player == 0:
+    move_list.insert(0,"P1: " + str(command)) # using global var 'move_list'
+  elif player == 1:
+    move_list.insert(0,"P2: " + str(command)) # using global var 'move_list'
   if len(move_list) == 11:
     move_list.pop()
 
