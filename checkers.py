@@ -1,6 +1,5 @@
-# final project - checkers v4.3
+# final project - checkers v4.4
 # bijan - erik - john - levi
-
 
 # ============================================PROGRAM BELOW===============================================
 
@@ -236,10 +235,16 @@ def process(command, text_board, isKing, player):
         
       else:
         show_message('ERROR')
+        return process(requestString("Player %d, make your move." % (player + 1)), text_board, false, player)
     else:
       show_message('ERROR')
+      return process(requestString("Player %d, make your move." % (player + 1)), text_board, false, player)
   else:
     show_message('ERROR')
+    return process(requestString("Player %d, make your move." % (player + 1)), text_board, false, player)
+    
+  speech(command)
+  
   return text_board
  
 # Function to add valid commands to 'move_list'
@@ -248,3 +253,50 @@ def add_to_move_list(command):
   move_list.insert(0,command) # using global var 'move_list'
   if len(move_list) == 11:
     move_list.pop()
+
+# Function to play text-to-speech for player commands
+def speech(command):
+  # Folder must contain wav files for a, b, c, d, e, f, g, 1, 2, 3, 4, 5, 6, 7, 8, and to
+  folder = "E:\\CSUMB - CS Online\\3. CST205\\Module 7\\Checkers\\Samples2\\"
+  start1 = command[0][:1]
+  start2 = command[0][1:]
+  to = command[1]
+  dest1 = command[2][:1]
+  dest2 = command[2][1:]
+  wav = ".wav"
+
+  speech1 = makeSound(folder + start1 + wav)
+  speech2 = makeSound(folder + start2 + wav)
+  speech3 = makeSound(folder + to + wav)
+  speech4 = makeSound(folder + dest1 + wav)
+  speech5 = makeSound(folder + dest2 + wav)
+  
+  play(collage(speech1, speech2, speech3, speech4, speech5))
+  
+# Combine audio files into one
+def collage(s1, s2, s3, s4, s5):
+  totalLength = getLength(s1) + getLength(s2) + getLength(s3) + getLength(s4) + getLength(s5)
+  final = makeEmptySound(totalLength, int(getSamplingRate(s1)))
+  i = 0
+  for n in range(0, getLength(s1)):
+    value = getSampleValueAt(s1, n)
+    setSampleValueAt(final, i, value)
+    i += 1
+  for n in range(0, getLength(s2)):
+    value = getSampleValueAt(s2, n)
+    setSampleValueAt(final, i, value)
+    i += 1
+  for n in range(0, getLength(s3)):
+    value = getSampleValueAt(s3, n)
+    setSampleValueAt(final, i, value)
+    i += 1
+  for n in range(0, getLength(s4)):
+    value = getSampleValueAt(s4, n)
+    setSampleValueAt(final, i, value)
+    i += 1
+  for n in range(0, getLength(s5)):
+    value = getSampleValueAt(s5, n)
+    setSampleValueAt(final, i, value)
+    i += 1
+  return final
+  
