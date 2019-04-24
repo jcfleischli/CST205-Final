@@ -1,7 +1,35 @@
 # final project - checkers v4
 # bijan - erik - john - levi
 
-# changes now listed in description
+# KNOWN ISSUES/BUGS:
+# crashes sometimes while playing and moving pieces, usually at 'while not' loop in valid movement testing
+
+#v4.1 changelog - bijan:
+#fixed issue in isMoveValid not checking for capturing enemy pieces properly
+
+# v4 changelog - erik:
+# added last add_to_move_list() function to keep track of valid moves
+# added move_list to display last 10 moves
+# will add colors corresponding to which player's piece was moved
+
+# v3 changelog - levi:
+# vastly simplified the process() function to have more optimal/readable design
+# added "else: return false" to isMoveValid() function because it was returning false positives
+# added Bijan's functions and incorporated them into my process() function
+# program can now distinguish between valid and invalid movements
+# *however*, I have not incorporated all of Bijan's functions to determine one piece jumping over another
+
+# v2 changelog - levi:
+# created show_message() function for message display
+# created process() function that processes user input to move game pieces
+# currently, game pieces can move anywhere they want
+# need: is_move_valid() function
+
+# v1 changelog - erik:
+# created draw_board function which takes a 2D list and draws the board
+# checkers() currently being used just to test speed and design
+# added coordinate letters and numbers to side
+# added piece counts - can seperate regular and king pieces if desired
 # ============================================PROGRAM BELOW===============================================
 
 # Global scope - trying to limit this
@@ -171,7 +199,7 @@ def isMoveValid(startRow, startCol, destRow, destCol, isKing, board, player):
     if isAdjacent(startRow, startCol, destRow, destCol, 2) != true and isPreviousDiagonalAPieceForCapture(startRow, startCol, destRow, destCol, player, board):
       return false
     else:
-      return false
+      return true
   
   return true
 
