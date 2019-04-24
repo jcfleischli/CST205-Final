@@ -1,5 +1,8 @@
-# final project - checkers 
+# final project - checkers v4.3
 # bijan - erik - john - levi
+
+
+# ============================================PROGRAM BELOW===============================================
 
 # Global scope - trying to limit this
 # references to move_list in beginning process() function and 'Long rect right - middle' in draw_board()
@@ -122,7 +125,7 @@ def show_message(prompt):
   if prompt == 'welcome':
     showInformation("Welcome to Checkers!\nIn this game, you and an opponent will take turns moving your pieces diagonally through text commands (e.g. 'C3 to D4').\nYour pieces can only move forward in a diagonal direction. However, pieces will be granted backwards movement capabilities if they reach the opposite end of the board.\nThe objective is to capture all of your enemy's pieces by jumping over them.\nRemember that you can string together multiple jumps!\nGood luck!")
   if prompt == 'invalid move':
-    showInformation("You cannot move that piece here.")
+    showInformation("Not a valid movement.")
   if prompt == 'error':
     showInformation("Error. Unable to process that command.")
 
@@ -200,9 +203,12 @@ def process(command, text_board, isKing, player):
     for j in num:
       coord = i + j
       map_grid[coord] = str(loc)
+      # Make single digits have leading zeros
+      # Helps smooth string-slicing interaction later on
+      if len(map_grid[coord]) == 1:
+        map_grid[coord] = map_grid[coord].zfill(2)
       loc -= 10
     total_loc += 1
-     
   # Analyze user input
   piece = 'none'
   command_copy = command.lower()
@@ -210,7 +216,7 @@ def process(command, text_board, isKing, player):
   # Test if valid input
   if len(command) == 3 and len(command[0]) == 2 and len(command[2]) == 2:
     if command[1] == "to" and command[0][:1] <= 'h' and int(command[0][1:]) <= 8 and command[2][:1] <= 'h' and int(command[2][1:]) <= 8:
-      # Test if valid movement
+      # Test if valid movement for pieces 
       if command[0] in map_grid and command[2] in map_grid:
         while not isMoveValid(int(map_grid[command[0]][:1]), int(map_grid[command[0]][1:]), int(map_grid[command[2]][:1]), int(map_grid[command[2]][1:]), isKing, text_board, player):
           show_message('INVALID MOVE')
